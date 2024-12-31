@@ -1,2 +1,3 @@
 # Gerador_de_Parcela
- Sistema que gera parcelas automaticamente, expondo os dados que são colocados pelo usuario no html. PDF e Personalizado.
+E um Sistema de Gerador de Carnê produzido para uma igreja, onde ele expoe os dados e gera um PDF personalizado.
+Utiliza Html/Css & Python. Executavel feito com Flask

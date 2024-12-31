@@ -1,0 +1,130 @@
+
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Carnê</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            text-align: center;
+        }
+
+        h1 {
+            color: #020d2ce7;
+            padding-bottom: 2%;
+        }
+
+        .error-popup {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding-top: 30px;
+            padding-bottom: 25px;
+            padding-left: 130px;
+            padding-right: 130px;
+            background: #f3f3f3;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.541);
+            margin-bottom: 3%;
+        }
+
+        label {
+            font-weight: bolder;
+            font-size: 130%;
+            margin-top: 10px;
+            display: flex;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border: 1px solid #020a27cb;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #0f335a;
+            color: white;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.445);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .logo {
+            width: 600px;
+            padding-top: 2%;
+        }
+    </style>
+
+    <script>
+        function validateForm(event) {
+            const capa = document.forms["carneForm"]["capa"].value;
+            const parcelas = document.forms["carneForm"]["parcelas"].value;
+            const valor = document.forms["carneForm"]["valor"].value;
+            const vencimento = document.forms["carneForm"]["vencimento"].value;
+            
+            if (!capa || !parcelas || !valor || !vencimento) {
+                event.preventDefault();
+                const errorPopup = document.getElementById("errorPopup");
+                errorPopup.innerText = "Todos os campos, exceto o nome do cliente, são obrigatórios.";
+                errorPopup.style.display = "block";
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+    <h1>GERADOR DE CARNÊ</h1>
+    <div id="errorPopup" class="error-popup" style="display:none;"></div>
+    <form name="carneForm" action="/gerar-pdf" method="post" enctype="multipart/form-data" onsubmit="return validateForm(event)">
+        <label for="capa">Capa do Carnê (PNG ou JPEG):</label><br>
+        <small>Dimensão necessária: 340px (altura) x 794px (largura)</small><br>
+        <input type="file" name="capa" required><br><br>
+
+        <label for="nome_cliente">Nome do Cliente:</label><br>
+        <input type="text" placeholder="Digite seu nome .... (Opcional)" name="nome_cliente"><br><br>
+
+        <label for="parcelas">Número de Parcelas:</label><br>
+        <input type="number" placeholder="Número de Parcelas ...." name="parcelas" min="1" required><br><br>
+
+        <label for="valor">Valor Total:</label><br>
+        <small>Apenas colocar o Valor sem nenhuma pontuação. Exemplo: 12900</small><br>
+        <input type="number" placeholder="Valor total do Carnê ...." name="valor" step="0.01" required><br><br>
+
+        <label for="vencimento">Data do Primeiro Vencimento:</label><br>
+        <small>Sempre coloque um mês antes do mês do Primeiro vencimento.</small><br>
+        <input type="date" name="vencimento" required><br><br>
+
+        <button type="submit">Gerar Carnê</button>
+    </form>
+</body>
+</html>
